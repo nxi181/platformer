@@ -196,9 +196,52 @@ public class Level {
 	//#############################################################################################################
 	//Your code goes here! 
 	//Please make sure you read the rubric/directions carefully and implement the solution recursively!
+
+	//pre-condition: col, row are within map bounds and fullness is =< 0
+	//post-conditon: a new water tile is added with a specified fullness
+
 	private void water(int col, int row, Map map, int fullness) {
 		
-	}
+    Tile[][] tiles = map.getTiles();
+
+	//check bounds
+    if (col < 0 || col >= tiles.length || row < 0 || row >= tiles[0].length) return;
+
+    Tile current = tiles[col][row];
+
+    if (current instanceof Water && ((Water) current).getFullness() >= fullness) return;
+    if (current.isSolid()) return;
+
+    // Pick image based on fullness
+    String image;
+    if (fullness == 3) image = "Full_water";
+    else if (fullness == 2) image = "Half_water";
+    else if (fullness == 1) image = "Quarter_water";
+    else image = "Falling_water";
+
+    
+    Water w = new Water(col, row, tileSize, tileset.getImage(image), this, fullness);
+    map.addTile(col, row, w);
+
+    // Try to go down 
+    if (row + 1 < tiles[0].length && !tiles[col][row + 1].isSolid()) {
+        water(col, row + 1, map, 0); // Falling water
+        return;
+    }
+
+    // If can't go down, spread left/right 
+    if (row + 1 < tiles[0].length && tiles[col][row + 1].isSolid()) {
+        if (col - 1 >= 0 && !tiles[col - 1][row].isSolid()) {
+            water(col - 1, row, map, Math.max(fullness - 1, 1)); // Spread left
+        }
+        if (col + 1 < tiles.length && !tiles[col + 1][row].isSolid()) {
+            water(col + 1, row, map, Math.max(fullness - 1, 1)); // Spread right
+        }
+    }
+}
+
+
+	
 
 
 
