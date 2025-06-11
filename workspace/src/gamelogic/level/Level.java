@@ -35,6 +35,7 @@ public class Level {
 
 	private ArrayList<Enemy> enemiesList = new ArrayList<>();
 	private ArrayList<Flower> flowers = new ArrayList<>();
+	private ArrayList<Water> waters = new ArayList<>();
 
 	private List<PlayerDieListener> dieListeners = new ArrayList<>();
 	private List<PlayerWinListener> winListeners = new ArrayList<>();
@@ -112,6 +113,7 @@ public class Level {
 					tiles[x][y] = new Gas(xPosition, yPosition, tileSize, tileset.getImage("GasThree"), this, 3);
 				else if (values[x][y] == 18)
 					tiles[x][y] = new Water(xPosition, yPosition, tileSize, tileset.getImage("Falling_water"), this, 0);
+					//waters.add((Water)tiles[x][y]);
 				else if (values[x][y] == 19)
 					tiles[x][y] = new Water(xPosition, yPosition, tileSize, tileset.getImage("Full_water"), this, 3);
 				else if (values[x][y] == 20)
@@ -134,7 +136,15 @@ public class Level {
 		active = true;
 		playerDead = false;
 		playerWin = false;
-	}
+
+		//boolean didITouchWater = false;
+		//for(Water w: waters){
+			//if(w.getHitbox().isIntersecting(player.getHitbox())){
+				//System.out.println("wateristouchingcode");
+				//didITouchWater = true;
+			//}
+		}
+	
 
 	public void onPlayerDeath() {
 		active = false;
@@ -191,6 +201,8 @@ public class Level {
 			camera.update(tslf);
 		}
 	}
+
+	
 
 	//pre-condition: numSquaresToFill is a non negative integer
 	//post condition: a total of numSquaresToFill are added/produced
